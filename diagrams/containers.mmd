@@ -1,0 +1,41 @@
+
+flowchart LR
+  subgraph Region["Region (US or EU)"]
+    subgraph Cell["Cell (multi-tenant)"]
+      UI["UI (TS/React)"]
+      APIGW["API Gateway / Edge"]
+      CP["Control Plane Services (Go)"]
+      PDP["Policy (OPA/Rego)"]
+      EP["Execution Workers (Rust core + Go orchestrator)"]
+      CG["Connector Gateway PEP (Rust/Go)"]
+      OTel["OTel Collector"]
+      PG["Postgres (RDS)"]
+      S3["S3 (Artifacts/Evidence Bundles)"]
+      Q["SQS (Queues + DLQ)"]
+      Redis["Redis (cache/rate limits)"]
+    end
+  end
+
+  UI --> APIGW --> CP
+  CP --> PG
+  CP --> S3
+  CP --> Q
+  CP --> PDP
+  EP --> Q
+  EP --> PDP
+  EP --> CG
+  EP --> PG
+  EP --> S3
+  EP --> OTel
+  CG --> PDP
+  CG --> OTel
+
+  %% External targets
+  SN["ServiceNow"]:::ext
+  Slack["Slack"]:::ext
+  GH["GitHub"]:::ext
+  CG --> SN
+  CG --> Slack
+  CG --> GH
+
+  classDef ext fill:#fff,stroke:#999,stroke-dasharray: 4 4;

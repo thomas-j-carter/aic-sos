@@ -1,0 +1,15 @@
+
+id: github
+version: 0.1.0
+kind: connector_manifest
+display_name: GitHub (Cloud)
+auth:
+  type: oauth2
+tool_actions:
+  - id: github.get_pull_request
+    labels: [read]
+    required_scopes: [pull_requests:read]
+  - id: github.post_pr_comment
+    labels: [write]
+    required_scopes: [pull_requests:write]
+    idempotency: required

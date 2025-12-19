@@ -1,0 +1,21 @@
+
+sequenceDiagram
+  autonumber
+  actor Owner as Workflow Owner
+  participant UI
+  participant CP
+  participant EP as Eval Workers
+  participant PDP
+  participant DB
+  Owner->>UI: Request promote to prod
+  UI->>CP: POST /v1/releases/candidates
+  CP->>PDP: authorize(release.candidate.create)
+  PDP-->>CP: ALLOW
+  CP->>DB: Create ReleaseCandidate
+  CP->>EP: Enqueue eval job
+  EP->>PDP: authorize(eval.run)
+  PDP-->>EP: ALLOW
+  EP->>DB: Store EvalRun + results
+  EP-->>CP: EvalRun complete (pass/fail)
+  CP-->>UI: Show eval summary + required approver(s)
+  Note over CP: MVP: minimal suite; v1: full safety/red-team/regression gates

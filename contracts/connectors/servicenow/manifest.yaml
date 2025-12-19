@@ -1,0 +1,28 @@
+
+id: servicenow
+version: 0.1.0
+kind: connector_manifest
+display_name: ServiceNow (Cloud)
+auth:
+  type: oauth2
+  note: Customer-managed app registration; tokens stored as CredentialRef
+risk:
+  default_risk_tier: medium
+tool_actions:
+  - id: servicenow.get_incident
+    labels: [read]
+    required_scopes: [incident.read]
+    input_schema_ref: schemas/servicenow.get_incident.input.json
+  - id: servicenow.update_incident_reversible
+    labels: [write]
+    required_scopes: [incident.write]
+    idempotency: required
+    caps:
+      per_workflow_per_workspace_writes_per_min: 30
+      per_tenant_writes_per_min: 300
+    input_schema_ref: schemas/servicenow.update_incident_reversible.input.json
+  - id: servicenow.add_work_note
+    labels: [write]
+    required_scopes: [incident.write]
+    idempotency: required
+    input_schema_ref: schemas/servicenow.add_work_note.input.json

@@ -1,0 +1,15 @@
+
+sequenceDiagram
+  autonumber
+  actor BO as Business Owner
+  participant UI as Web UI
+  participant CP as Control Plane
+  participant PDP as Policy (PDP)
+  participant DB as Postgres
+  BO->>UI: Submit use case intake form
+  UI->>CP: POST /v1/use_cases
+  CP->>PDP: authorize(action=use_case.create)
+  PDP-->>CP: ALLOW
+  CP->>DB: Create UseCase + initial RiskTier + owners
+  CP-->>UI: UseCase created (score pending)
+  Note over CP: Optional async scoring + reviewers assignment

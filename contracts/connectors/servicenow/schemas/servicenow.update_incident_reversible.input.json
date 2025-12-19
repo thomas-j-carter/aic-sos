@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "instance_id",
+    "incident_sys_id",
+    "fields",
+    "idempotency_key"
+  ],
+  "properties": {
+    "instance_id": {
+      "type": "string"
+    },
+    "incident_sys_id": {
+      "type": "string"
+    },
+    "idempotency_key": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "object",
+      "properties": {
+        "assignment_group": {
+          "type": "string"
+        },
+        "assigned_to": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "subcategory": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "short_description": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

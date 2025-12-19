@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "event_type",
+    "event_version",
+    "occurred_at",
+    "tenant_id",
+    "workspace_id",
+    "idempotency_key",
+    "payload"
+  ],
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "incident.created"
+    },
+    "event_version": {
+      "type": "integer",
+      "minimum": 1,
+      "const": 1
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "workspace_id": {
+      "type": "string"
+    },
+    "idempotency_key": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object",
+      "required": [
+        "incident_id",
+        "severity",
+        "summary"
+      ],
+      "properties": {
+        "incident_id": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "P0",
+            "P1",
+            "P2",
+            "P3"
+          ]
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "summary": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

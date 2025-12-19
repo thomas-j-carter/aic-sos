@@ -1,0 +1,172 @@
+
+openapi: 3.0.3
+info:
+  title: Governed AI Delivery Factory API
+  version: "0.1.0"
+servers:
+  - url: https://api.example.com
+paths:
+  /v1/tenants:
+    post:
+      summary: Create tenant (internal/admin only)
+      responses:
+        "201": { description: Created }
+  /v1/workspaces:
+    post:
+      summary: Create workspace
+      responses:
+        "201": { description: Created }
+  /v1/use_cases:
+    post:
+      summary: Create use case intake record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UseCaseCreate'
+      responses:
+        "201": { description: Created }
+  /v1/workflows:
+    post:
+      summary: Create workflow (YAML canonical)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowCreate'
+      responses:
+        "201": { description: Created }
+  /v1/policy/simulate:
+    post:
+      summary: Simulate policy decisions for requested actions/scopes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicySimulateRequest'
+      responses:
+        "200":
+          description: Simulation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicySimulateResponse'
+  /v1/connectors/instances:
+    post:
+      summary: Create connector instance (stores CredentialRef and scopes)
+      responses:
+        "201": { description: Created }
+  /v1/runs:
+    post:
+      summary: Trigger a run (async)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunCreate'
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunAccepted'
+  /v1/approvals/{approval_id}/decide:
+    post:
+      summary: Approve/deny (HITL)
+      parameters:
+        - in: path
+          name: approval_id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalDecision'
+      responses:
+        "200": { description: Recorded }
+components:
+  schemas:
+    UseCaseCreate:
+      type: object
+      required: [name, description, owner_principal_id]
+      properties:
+        name: { type: string }
+        description: { type: string }
+        owner_principal_id: { type: string }
+        initial_risk_tier: { type: string, enum: [low, medium, high], default: medium }
+    WorkflowCreate:
+      type: object
+      required: [workspace_id, name, yaml, model_pin]
+      properties:
+        workspace_id: { type: string }
+        name: { type: string }
+        yaml: { type: string, description: "Canonical YAML definition" }
+        model_pin:
+          type: object
+          required: [provider, model]
+          properties:
+            provider: { type: string, enum: [openai, azure_openai, anthropic] }
+            model: { type: string }
+            allow_fallback: { type: boolean, default: false }
+    PolicySimulateRequest:
+      type: object
+      required: [workspace_id, actions]
+      properties:
+        workspace_id: { type: string }
+        actions:
+          type: array
+          items:
+            type: object
+            required: [tool_action_id]
+            properties:
+              tool_action_id: { type: string }
+              requested_scopes:
+                type: array
+                items: { type: string }
+              risk_tier: { type: string, enum: [low, medium, high] }
+    PolicySimulateResponse:
+      type: object
+      required: [results]
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            required: [tool_action_id, decision]
+            properties:
+              tool_action_id: { type: string }
+              decision: { type: string, enum: [ALLOW, DENY, REQUIRE_HITL, REQUIRE_STEP_UP, THROTTLE] }
+              reason_codes:
+                type: array
+                items: { type: string }
+              rule_ids:
+                type: array
+                items: { type: string }
+    RunCreate:
+      type: object
+      required: [workspace_id, workflow_id, input]
+      properties:
+        workspace_id: { type: string }
+        workflow_id: { type: string }
+        input: { type: object }
+        idempotency_key: { type: string }
+        sandbox: { type: boolean, default: false }
+    RunAccepted:
+      type: object
+      required: [run_id, status]
+      properties:
+        run_id: { type: string }
+        status: { type: string, enum: [queued, running] }
+    ApprovalDecision:
+      type: object
+      required: [decision]
+      properties:
+        decision: { type: string, enum: [approve, deny] }
+        comment: { type: string }

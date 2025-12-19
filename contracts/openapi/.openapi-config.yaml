@@ -1,0 +1,30 @@
+# OpenAPI Generator Configuration
+# For generating Go server stubs from openapi.yaml
+
+packageName: generated
+packageVersion: "0.1.0"
+
+# Go-specific options
+modules:
+  - goGetAdditionalDependencies: true
+    goImportAlias: "github.com/platform/generated"
+
+# Don't generate models (use hand-written types)
+generateModels: false
+
+# Skip documentation generation
+generateDocumentation: false
+
+# Use chi router (lightweight, good for microservices)
+goImport: "github.com/go-chi/chi/v5"
+
+# Skip tests (we write our own)
+skipTests: true
+
+# Add license headers
+licenseName: "MIT"
+
+# Additional properties
+additionalProperties:
+  useGoModules: true
+  goImportAlias: "github.com/platform/generated"

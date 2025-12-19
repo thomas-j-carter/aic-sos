@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "instance_id",
+    "incident_sys_id"
+  ],
+  "properties": {
+    "instance_id": {
+      "type": "string"
+    },
+    "incident_sys_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "event_type",
+    "event_version",
+    "occurred_at",
+    "tenant_id",
+    "workspace_id",
+    "idempotency_key",
+    "payload"
+  ],
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "connector.scope_changed"
+    },
+    "event_version": {
+      "type": "integer",
+      "minimum": 1,
+      "const": 1
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "workspace_id": {
+      "type": "string"
+    },
+    "idempotency_key": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object",
+      "required": [
+        "connector_instance_id",
+        "connector_type",
+        "change_type",
+        "scopes"
+      ],
+      "properties": {
+        "connector_instance_id": {
+          "type": "string"
+        },
+        "connector_type": {
+          "type": "string"
+        },
+        "change_type": {
+          "type": "string",
+          "enum": [
+            "requested",
+            "approved",
+            "revoked"
+          ]
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

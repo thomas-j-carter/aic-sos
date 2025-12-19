@@ -1,0 +1,41 @@
+
+sequenceDiagram
+  autonumber
+  participant SN as ServiceNow
+  participant CP as Ingestion API
+  participant EP as Runtime Workers
+  participant PDP as Policy (PDP)
+  participant CG as Connector Gateway (PEP)
+  participant Slack as Slack
+  participant Audit as Audit/Evidence
+  SN->>CP: Webhook: incident.created
+  CP->>PDP: authorize(trigger.ingest)
+  PDP-->>CP: ALLOW
+  CP->>EP: Enqueue Run (ticket triage)
+  EP->>PDP: authorize(tool.read:servicenow.get_incident)
+  PDP-->>EP: ALLOW
+  EP->>CG: Call ToolAction get_incident
+  CG->>PDP: authorize(connector.call)
+  PDP-->>CG: ALLOW
+  CG->>SN: GET incident details
+  SN-->>CG: Incident JSON
+  CG-->>EP: Incident JSON
+  EP->>Audit: Record DecisionRecord + ToolCall (redacted) + metering
+  EP->>PDP: authorize(llm.call)
+  PDP-->>EP: ALLOW (BYO keys constraint)
+  EP-->>EP: LLM summarize + classify + propose assignment
+  EP->>Slack: Post approval request (HITL)
+  Slack-->>EP: Approval decision
+  alt Approved
+    EP->>PDP: authorize(tool.write:servicenow.update_incident)
+    PDP-->>EP: ALLOW (caps + idempotency required)
+    EP->>CG: Call ToolAction update_incident (idempotency_key)
+    CG->>PDP: authorize(connector.call)
+    PDP-->>CG: ALLOW
+    CG->>SN: PATCH incident (assignment/category/priority + work note)
+    SN-->>CG: 200 OK
+    CG-->>EP: Success
+  else Rejected
+    EP-->>SN: No write actions executed
+  end
+  EP->>Audit: Append AuditLogEvent (hash-chained) + EvidenceBundle pointer

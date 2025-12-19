@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "event_type",
+    "event_version",
+    "occurred_at",
+    "tenant_id",
+    "workspace_id",
+    "idempotency_key",
+    "payload"
+  ],
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "approval.required"
+    },
+    "event_version": {
+      "type": "integer",
+      "minimum": 1,
+      "const": 1
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "workspace_id": {
+      "type": "string"
+    },
+    "idempotency_key": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object",
+      "required": [
+        "approval_id",
+        "run_id",
+        "risk_tier",
+        "action_summary"
+      ],
+      "properties": {
+        "approval_id": {
+          "type": "string"
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "risk_tier": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "action_summary": {
+          "type": "string"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

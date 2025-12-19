@@ -1,0 +1,26 @@
+
+sequenceDiagram
+  autonumber
+  actor Builder
+  participant UI
+  participant CP
+  participant PDP
+  participant DB
+  participant SN as ServiceNow
+  participant Slack as Slack
+  Builder->>UI: Create workflow from template
+  UI->>CP: POST /v1/workflows
+  CP->>PDP: authorize(workflow.create)
+  PDP-->>CP: ALLOW
+  CP->>DB: Store workflow YAML v0.1 + model pin
+  Builder->>UI: Install/authorize ServiceNow connector
+  UI->>CP: POST /v1/connectors/instances (OAuth flow)
+  CP->>PDP: authorize(connector.install)
+  PDP-->>CP: REQUIRE_STEP_UP (if elevated)
+  CP->>DB: Store CredentialRef + scopes requested (pending approval if needed)
+  Builder->>UI: Run sandbox test
+  UI->>CP: POST /v1/runs?sandbox=true
+  CP->>PDP: authorize(run.create)
+  PDP-->>CP: ALLOW
+  CP->>DB: Create Run + enqueue steps
+  CP-->>UI: Run started

@@ -1,0 +1,18 @@
+
+sequenceDiagram
+  autonumber
+  actor Approver
+  participant UI
+  participant CP
+  participant PDP
+  participant DB
+  participant EP as Runtime Workers
+  Approver->>UI: Approve ReleaseCandidate for Prod
+  UI->>CP: POST /v1/approvals/{id}/decide (approve)
+  CP->>PDP: authorize(approval.decide)
+  PDP-->>CP: ALLOW (step-up if required)
+  CP->>DB: Write ApprovalDecision + ApprovalArtifact (immutable)
+  CP->>DB: Create Deployment record (canary)
+  CP->>EP: Push policy bundle + artifact version for prod
+  EP-->>CP: Deployment health signals
+  CP-->>UI: Canary status + rollback controls

@@ -1,0 +1,16 @@
+
+id: slack
+version: 0.1.0
+kind: connector_manifest
+display_name: Slack
+auth:
+  type: oauth2
+tool_actions:
+  - id: slack.post_message
+    labels: [write]
+    required_scopes: [chat:write]
+    idempotency: optional
+  - id: slack.post_approval_request
+    labels: [write]
+    required_scopes: [chat:write, commands, incoming-webhook]
+    idempotency: required

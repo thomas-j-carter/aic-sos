@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "event_type",
+    "event_version",
+    "occurred_at",
+    "tenant_id",
+    "workspace_id",
+    "idempotency_key",
+    "payload"
+  ],
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "const": "policy.denied"
+    },
+    "event_version": {
+      "type": "integer",
+      "minimum": 1,
+      "const": 1
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "workspace_id": {
+      "type": "string"
+    },
+    "idempotency_key": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object",
+      "required": [
+        "run_id",
+        "tool_action_id"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string"
+        },
+        "tool_action_id": {
+          "type": "string"
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rule_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
