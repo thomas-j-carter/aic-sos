@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RunBlockedEvent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_type", "occurred_at", "tenant_id", "correlation_id", "actor", "payload"],
+  "properties": {
+    "event_type": {"type": "string", "const": "run.blocked"},
+    "occurred_at": {"type": "string"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"},
+    "actor": {"type": "string"},
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_id", "reason_code"],
+      "properties": {
+        "run_id": {"type": "string"},
+        "reason_code": {
+          "type": "string",
+          "enum": [
+            "APPROVAL_REQUIRED_HIGH_RISK",
+            "EXECUTION_FAILED",
+            "POLICY_SNAPSHOT_MISMATCH"
+          ]
+        }
+      }
+    }
+  }
+}

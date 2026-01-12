@@ -1,0 +1,7 @@
+{
+  "reason_codes": [
+    "APPROVAL_REQUIRED_HIGH_RISK",
+    "EXECUTION_FAILED",
+    "POLICY_SNAPSHOT_MISMATCH"
+  ]
+}

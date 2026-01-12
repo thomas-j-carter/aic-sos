@@ -1,0 +1,7 @@
+{
+  "tenant_id": "tenant_123",
+  "correlation_id": "corr_001",
+  "actor": "approver:bob",
+  "run_id": "run_123",
+  "policy_snapshot_hash": "snap_abc"
+}
