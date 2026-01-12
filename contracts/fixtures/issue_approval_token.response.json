@@ -1,0 +1,8 @@
+{
+  "status": "ok",
+  "token": {
+    "token_id": "token_789",
+    "policy_snapshot_hash": "snap_abc",
+    "issued_at": "2024-01-01T00:00:00Z"
+  }
+}

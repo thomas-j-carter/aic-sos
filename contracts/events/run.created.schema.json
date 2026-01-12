@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RunCreatedEvent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_type", "occurred_at", "tenant_id", "correlation_id", "actor", "payload"],
+  "properties": {
+    "event_type": {"type": "string", "const": "run.created"},
+    "occurred_at": {"type": "string"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"},
+    "actor": {"type": "string"},
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_id", "policy_snapshot_hash"],
+      "properties": {
+        "run_id": {"type": "string"},
+        "policy_snapshot_hash": {"type": "string"}
+      }
+    }
+  }
+}

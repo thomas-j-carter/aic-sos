@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ExecuteRunResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["execution_result"],
+  "properties": {
+    "execution_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {"type": "string", "enum": ["succeeded", "failed"]},
+        "reason_code": {
+          "type": "string",
+          "enum": [
+            "APPROVAL_REQUIRED_HIGH_RISK",
+            "EXECUTION_FAILED",
+            "POLICY_SNAPSHOT_MISMATCH"
+          ]
+        }
+      }
+    }
+  }
+}

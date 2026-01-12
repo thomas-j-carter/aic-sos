@@ -1,0 +1,7 @@
+{
+  "status": "ok",
+  "decision": "approve_required",
+  "approval_required": true,
+  "policy_snapshot_hash": "snap_abc",
+  "reason_code": "APPROVAL_REQUIRED_HIGH_RISK"
+}

@@ -1,0 +1,32 @@
+name: Contracts
+
+on:
+  push:
+    paths:
+      - "contracts/**"
+      - "scripts/**"
+      - ".github/workflows/contracts.yml"
+  pull_request:
+    paths:
+      - "contracts/**"
+      - "scripts/**"
+      - ".github/workflows/contracts.yml"
+
+jobs:
+  validate-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python3 -m pip install jsonschema
+      - name: Validate contracts
+        run: |
+          python3 scripts/validate_contracts.py
+          python3 scripts/check_contract_map.py
+          python3 scripts/check_reason_codes.py
+          python3 scripts/check_lifecycle_sequence.py
+          python3 scripts/check_snapshot_integrity.py
+          python3 scripts/check_local_events_ndjson.py

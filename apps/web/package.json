@@ -1,9 +1,0 @@
-{
-  "name": "web",
-  "private": true,
-  "version": "0.1.0",
-  "type": "module",
-  "scripts": {
-    "dev": "echo 'TODO: scaffold UI (Vite/Next)'"
-  }
-}

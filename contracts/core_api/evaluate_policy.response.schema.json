@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EvaluatePolicyResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "decision", "approval_required", "policy_snapshot_hash"],
+  "properties": {
+    "status": {"type": "string", "enum": ["ok"]},
+    "decision": {"type": "string", "enum": ["allow", "approve_required"]},
+    "approval_required": {"type": "boolean"},
+    "policy_snapshot_hash": {"type": "string"},
+    "reason_code": {
+      "type": "string",
+      "enum": [
+        "APPROVAL_REQUIRED_HIGH_RISK",
+        "EXECUTION_FAILED",
+        "POLICY_SNAPSHOT_MISMATCH"
+      ]
+    }
+  }
+}

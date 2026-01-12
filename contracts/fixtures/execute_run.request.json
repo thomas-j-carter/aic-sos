@@ -1,0 +1,12 @@
+{
+  "tenant_id": "tenant_123",
+  "correlation_id": "corr_001",
+  "actor": "system:orchestrator",
+  "run_id": "run_123",
+  "policy_snapshot_hash": "snap_abc",
+  "approval_token": {
+    "token_id": "token_789",
+    "policy_snapshot_hash": "snap_abc",
+    "issued_at": "2024-01-01T00:00:00Z"
+  }
+}
